@@ -1,44 +1,30 @@
-
 pipeline {
-    agent any
+    agent any 
 
-    
-
-        stage('Install Dependencies') {
-            steps {
-                // Install NPM dependencies
-                sh 'npm install'
-            }
-        }
-
-        stage('Run Tests') {
-            steps {
-                // Run tests using Mocha
-                sh 'npm test'
-            }
-        }
-
+    stages {
         stage('Build') {
             steps {
-                // You can add build commands here if needed
-                echo 'Building the project'
+                script {
+                    // Build your Docker image
+                    bat 'docker build -t my-nodejs-app .'
+                }
             }
         }
-
+        stage('Test') {
+            steps {
+                script {
+                    // Run tests here if you have any
+                    echo 'Running tests...'
+                }
+            }
+        }
         stage('Deploy') {
             steps {
-                // Optional: Add your deployment steps (e.g., upload to server, Docker, etc.)
-                echo 'Deploying the application'
+                script {
+                    // Deploy your Docker image
+                    echo 'Deploying application...'
+                }
             }
-        }
-    }
-
-    post {
-        success {
-            echo 'Build succeeded!'
-        }
-        failure {
-            echo 'Build failed!'
         }
     }
 }
